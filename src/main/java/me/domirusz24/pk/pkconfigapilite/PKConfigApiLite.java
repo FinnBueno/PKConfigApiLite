@@ -67,7 +67,7 @@ public final class PKConfigApiLite {
 
         for (Field field : clazz.getDeclaredFields()) {
             modifiers = field.getModifiers();
-            if (Modifier.isPrivate(modifiers) && Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers)) {
+            if (Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers)) {
 
                 configAnnotation = field.getAnnotation(ConfigValue.class);
                 languageAnnotation = field.getAnnotation(LanguageValue.class);
