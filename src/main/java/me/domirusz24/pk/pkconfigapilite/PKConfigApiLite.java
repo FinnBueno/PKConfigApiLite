@@ -3,9 +3,6 @@ package me.domirusz24.pk.pkconfigapilite;
 import com.projectkorra.projectkorra.Element;
 import com.projectkorra.projectkorra.ability.AddonAbility;
 import com.projectkorra.projectkorra.ability.CoreAbility;
-import com.projectkorra.projectkorra.configuration.ConfigManager;
-import com.projectkorra.projectkorra.configuration.ConfigType;
-import jdk.internal.net.http.common.Pair;
 import me.domirusz24.pk.pkconfigapilite.annotations.ConfigAbility;
 import me.domirusz24.pk.pkconfigapilite.annotations.ConfigValue;
 import org.bukkit.Bukkit;
@@ -22,8 +19,12 @@ import java.util.function.Function;
 
 public final class PKConfigApiLite {
 
-    @ConfigValue("range")
-    private static final double RANGE = 20;
+    private static class Pair<T, R> {
+        private T first;
+        private R second;
+        Pair(T first, R second) { this.first = first; this.second = second; }
+    }
+
     private static final Map<String, Function<AddonAbility, String>> PLACEHOLDERS = new HashMap<>();
     static {
         PLACEHOLDERS.put("version", AddonAbility::getVersion);
@@ -55,7 +56,7 @@ public final class PKConfigApiLite {
             }
             fileConfig.options().copyDefaults(true);
             // store them in our map so we can reference them by name later
-            configTypeToFile.put(configName, Pair.pair(fileConfig, file));
+            configTypeToFile.put(configName, new Pair<>(fileConfig, file));
         }
 
         // find the config path for this ability. This will usually be something like "ExtraAbilities.<Author>.<Ability>."
