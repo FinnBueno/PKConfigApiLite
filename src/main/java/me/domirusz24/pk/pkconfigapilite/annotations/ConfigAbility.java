@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface ConfigAbility {
     String value() default "ExtraAbilities";
-    String configPath() default "config.yml";
-    String languagePath() default "language.yml";
+    String extension() default "yml";
+    String[] configs() default { "config", "language" };
     String plugin() default "ProjectKorra";
 }
 
