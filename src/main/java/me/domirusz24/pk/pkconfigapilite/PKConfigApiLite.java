@@ -84,15 +84,19 @@ public final class PKConfigApiLite {
 
             // remove the private modifier
             field.setAccessible(true);
-            // remove the final modifier
-            if (Modifier.isFinal(field.getModifiers())) {
-                try {
-                    field.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-                } catch (IllegalAccessException e) {
-                    System.err.println("Field " + field.getName() + " in " + ability.getName() + " could not have their final modifier removed! (Try making the field non-final)");
-                    e.printStackTrace();
-                }
-            }
+            // unfortunately, it doesn't seem to be possible to modify a compile time constant because of inlining,
+			// so we have to avoid the final modifier
+			if (Modifier.isFinal(field.getModifiers())) {
+				System.err.println(
+					String.format(
+						"Field %s in %s has the final modifier, which means PKConfigApiLite can't modify it. Please contact the developer of this move and ask them to " +
+						"remove it.",
+						field.getName(),
+						ability.getName()
+					)
+				);
+				continue;
+			}
 
             // get the default value from the field itself
             try {
