@@ -75,7 +75,7 @@ public final class PKConfigApiLite {
 
             // if this field isn't static, it can't be configurable and thus we skip it
             if (!Modifier.isStatic(modifiers)) {
-                return;
+                continue;
             }
 
             // find if there's a ConfigValue annotation above the field. If not, we skip it
@@ -120,7 +120,7 @@ public final class PKConfigApiLite {
             // if no name was supplied, we generate one from the field name
             if (name.length() == 0) {
                 // generate name instead
-                name = field.getName().charAt(0) + field.getName().toLowerCase().substring(1);
+                name = getUserFriendlyName(field.getName());
             }
             // set the default value in the config
             // this method only sets the value in the config if it doesn't exist yet
@@ -153,6 +153,24 @@ public final class PKConfigApiLite {
             System.out.println("Config for " + ability.getName() + " couldn't be saved! Plugin: " + abilityAnnotation.plugin());
         }
 
+    }
+
+    /**
+     * Replaces the given string into a user friendly name, replaces "_" with "."
+     * @param value The string to replace placeholders in
+     * @return A user friendly name
+     */
+    private static String getUserFriendlyName(String value) {
+        String[] split = value.split("_");
+        StringBuilder name = new StringBuilder();
+        for (String s : split) {
+            name
+                    .append(String.valueOf(s.charAt(0)).toUpperCase())
+                    .append(s.substring(1).toLowerCase())
+                    .append(".");
+        }
+        name.deleteCharAt(name.length() - 1);
+        return name.toString();
     }
 
     /**
